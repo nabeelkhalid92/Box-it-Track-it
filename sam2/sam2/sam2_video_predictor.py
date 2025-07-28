@@ -742,7 +742,7 @@ class SAM2VideoPredictor(SAM2Base):
             _, video_res_masks = self._get_orig_video_res_output(
                 inference_state, pred_masks
             )
-            yield frame_idx, obj_ids, video_res_masks
+            yield frame_idx, obj_ids, video_res_masks, current_out["object_score_logits"]
 
     def _add_output_per_object(
         self, inference_state, frame_idx, current_out, storage_key

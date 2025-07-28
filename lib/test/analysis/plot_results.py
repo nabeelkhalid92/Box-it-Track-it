@@ -140,12 +140,12 @@ def plot_draw_save(y, x, scores, trackers, plot_draw_styles, result_plot_path, p
     legend_text = []
 
     for id, id_sort in enumerate(index_sort):
-        if trackers[id_sort]['disp_name'].startswith('SAMURAI'):
+        if trackers[id_sort]['disp_name'].startswith('BoxTrack'):
             alpha = 1.0
             line_style = '-'
-            if trackers[id_sort]['disp_name'] == 'SAMURAI-L':
+            if trackers[id_sort]['disp_name'] == 'BoxTrack-L':
                 color = (1.0, 0.0, 0.0)
-            elif trackers[id_sort]['disp_name'] == 'SAMURAI-B':
+            elif trackers[id_sort]['disp_name'] == 'BoxTrack-B':
                 color = (0.0, 0.0, 1.0)
         elif trackers[id_sort]['disp_name'].startswith('SAM2.1'):
             alpha = 0.8

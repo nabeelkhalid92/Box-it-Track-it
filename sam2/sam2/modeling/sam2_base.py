@@ -97,9 +97,9 @@ class SAM2Base(torch.nn.Module):
         # extra arguments used to construct the SAM mask decoder; if not None, it should be a dict of kwargs to be passed into `MaskDecoder` class.
         sam_mask_decoder_extra_args=None,
         compile_image_encoder: bool = False,
-        # Whether to use SAMURAI or original SAM 2
-        samurai_mode: bool = False,
-        # Hyperparameters for SAMURAI
+        # Whether to use BoxTrackor original SAM 2
+        BoxTrack: bool = False,
+        # Hyperparameters for BoxTrack
         stable_frames_threshold: int = 15,
         stable_ious_threshold: float = 0.3,
         min_obj_score_logits: float = -1,
@@ -195,8 +195,8 @@ class SAM2Base(torch.nn.Module):
         self._build_sam_heads()
         self.max_cond_frames_in_attn = max_cond_frames_in_attn
 
-        # Whether to use SAMURAI or original SAM 2
-        self.samurai_mode = samurai_mode
+        # Whether to use BoxTrackor original SAM 2
+        self.BoxTrack = BoxTrack
 
         # Init Kalman Filter
         self.kf = KalmanFilter()
@@ -208,7 +208,7 @@ class SAM2Base(torch.nn.Module):
         self.history = {} # debug
         self.frame_cnt = 0 # debug
 
-        # Hyperparameters for SAMURAI
+        # Hyperparameters for BoxTrack
         self.stable_frames_threshold = stable_frames_threshold
         self.stable_ious_threshold = stable_ious_threshold
         self.min_obj_score_logits = min_obj_score_logits
@@ -217,7 +217,7 @@ class SAM2Base(torch.nn.Module):
         self.memory_bank_obj_score_threshold = memory_bank_obj_score_threshold
         self.memory_bank_kf_score_threshold = memory_bank_kf_score_threshold
 
-        print(f"\033[93mSAMURAI mode: {self.samurai_mode}\033[0m")
+        print(f"\033[93mBoxTrack: {self.BoxTrack}\033[0m")
 
         # Model compilation
         if compile_image_encoder:
@@ -417,7 +417,7 @@ class SAM2Base(torch.nn.Module):
 
         sam_output_token = sam_output_tokens[:, 0]
         kf_ious = None
-        if multimask_output and self.samurai_mode:
+        if multimask_output and self.BoxTrack:
             if self.kf_mean is None and self.kf_covariance is None or self.stable_frames == 0:
                 best_iou_inds = torch.argmax(ious, dim=-1)
                 batch_inds = torch.arange(B, device=device)
@@ -496,7 +496,7 @@ class SAM2Base(torch.nn.Module):
                     self.stable_frames = 0
                 else:
                     self.kf_mean, self.kf_covariance = self.kf.update(self.kf_mean, self.kf_covariance, self.kf.xyxy_to_xyah(high_res_multibboxes[best_iou_inds]))
-        elif multimask_output and not self.samurai_mode:
+        elif multimask_output and not self.BoxTrack:
             # take the best mask prediction (with the highest IoU estimation)
             best_iou_inds = torch.argmax(ious, dim=-1)
             batch_inds = torch.arange(B, device=device)
@@ -658,7 +658,7 @@ class SAM2Base(torch.nn.Module):
             # we take (self.num_maskmem - 2) frames among every stride-th frames plus the last frame.
             stride = 1 if self.training else self.memory_temporal_stride_for_eval
 
-            if self.samurai_mode:
+            if self.BoxTrack:
                 valid_indices = [] 
                 if frame_idx > 1:  # Ensure we have previous frames to evaluate
                     for i in range(frame_idx - 1, 1, -1):  # Iterate backwards through previous frames

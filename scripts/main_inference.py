@@ -31,14 +31,14 @@ testing_set = "data/LaSOT/testing_set.txt"
 with open(testing_set, 'r') as f:
     test_videos = f.readlines()
 
-exp_name = "samurai"
+exp_name = "boxtrack"
 model_name = "base_plus"
 
 checkpoint = f"sam2/checkpoints/sam2.1_hiera_{model_name}.pt"
 if model_name == "base_plus":
-    model_cfg = "configs/samurai/sam2.1_hiera_b+.yaml"
+    model_cfg = "configs/boxtrack/sam2.1_hiera_b+.yaml"
 else:
-    model_cfg = f"configs/samurai/sam2.1_hiera_{model_name[0]}.yaml"
+    model_cfg = f"configs/boxtrack/sam2.1_hiera_{model_name[0]}.yaml"
 
 video_folder= "data/LaSOT"
 pred_folder = f"results/{exp_name}/{exp_name}_{model_name}"
