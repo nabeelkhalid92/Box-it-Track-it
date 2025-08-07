@@ -125,6 +125,3 @@ python scripts/demo.py \
     --interval_mode interval \
     --interval_param 300
 ```
-
----
-# Minor update
