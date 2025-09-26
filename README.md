@@ -1,7 +1,8 @@
 <div align="center">
-
+📄 [Read the paper](https://www.dfki.de/fileadmin/user_upload/import/16005_108.pdf)
 # Box-it-Track-it
 Accurate cell tracking in microscopy is essential for studying biological dynamics like proliferation and migration. Traditional fully supervised methods demand dense pixel-wise masks for every frame, making them impractical for large-scale use. Recent methods like SAT reduce annotation effort by using sparse point-based supervision, but still require multiple positive and negative points per cell, which remains labor-intensive. BoxTrack offers a lightweight and annotation-efficient alternative, requiring only a single bounding box per cell in the first frame. Without relying on any point-level annotations, it performs end-to-end instance segmentation and tracking over entire sequences. This simplification leads to a substantial reduction in annotation cost while improving performance over SAT. On the CTMC dataset, BoxTrack improves Multiple Object Tracking Accuracy (MOTA) by +15.96% over SAT. For the CTC dataset, it yields a +8.86% MOTA gain.
+
 </div>
 
 ## Getting Started
